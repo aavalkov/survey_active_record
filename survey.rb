@@ -11,12 +11,14 @@ ActiveRecord::Base.establish_connection(development_configuration)
 def main_menu
   puts "Press 's' to add a new survey"
   puts "Press 'l' to list surveys"
-  puts "Press 's' to exit"
-  puts "Press 'q' to add a question"
+  puts "Press 'u' to list all questions"
+  puts "Press 'q' to add a question to a survey"
+  puts "Press 'x' to exit"
   user_choice = gets.chomp
   case user_choice
     when 's' then add_survey
     when 'l' then list_survey
+    when 'u' then list_question
     when 'q' then add_question
     when 'x' then exit
   end
@@ -25,6 +27,7 @@ end
 
 def add_survey
   puts "Enter the title of your survey"
+  print ">"
   title = gets.chomp
   new_title = Survey.create({:title => title})
   puts "Survey #{new_title.title} added!"
@@ -36,12 +39,24 @@ def list_survey
   puts "\n"
 end
 
-def add_questions
-  puts "Enter the your question"
-  name = gets.chomp
-  new_question = Question.create({:name = name}}
+def list_question
+  puts "All questions:\n"
+  Question.all.each { |q| puts q.name }
+  puts "\n"
 end
 
+def add_question
+  list_survey
+  puts "Select the survey to add a question to: "
+  print ">"
+  survey_title = gets.chomp
+  survey = Survey.find_or_create_by(:title => survey_title)
+  puts "Enter your question"
+  print ">"
+  name = gets.chomp
+  new_question = Question.create({:name => name, :survey_id => survey.id })
+  puts "The question '#{new_question.name}' has been added to '#{survey.title}'!\n"
+end
 
 main_menu
 
