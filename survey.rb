@@ -91,14 +91,14 @@ def survey_data
   number = gets.chomp.to_i
   survey = Survey.find(number)
   questions = Question.where(:survey_id => survey.id)
-  questions.each do |question, index|
-    puts "#{index}. Question: #{question.name}"
+  questions.each_with_index do |question, index|
+    puts "#{index+1}. Question: #{question.name}"
   end
   puts "Enter the question you would like stats for:"
   question_number = gets.chomp.to_i
   choices = Choice.where(:question_id => question_number)
   choices.each do |choice|
-    puts choice.number_of_responses
+    puts "Choice: #{choice.name} was picked #{choice.number_of_responses} times!"
   end
 end
 
