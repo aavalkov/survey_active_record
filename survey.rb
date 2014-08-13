@@ -2,6 +2,7 @@ require 'active_record'
 require './lib/survey'
 require './lib/response'
 require './lib/question'
+require './lib/choice'
 require 'pry'
 
 database_configurations = YAML::load(File.open('./db/config.yml'))
@@ -13,9 +14,11 @@ def main_menu
   puts "Press 'l' to list surveys"
   puts "Press 'u' to list all questions"
   puts "Press 'q' to add a question to a survey"
+  puts "Press 'c' to add a choice to a question"
   puts "Press 'x' to exit"
   user_choice = gets.chomp
   case user_choice
+    when 'c' then add_choice
     when 's' then add_survey
     when 'l' then list_survey
     when 'u' then list_question
@@ -57,6 +60,20 @@ def add_question
   new_question = Question.create({:name => name, :survey_id => survey.id })
   puts "The question '#{new_question.name}' has been added to '#{survey.title}'!\n"
 end
+
+def add_choice
+  list_question
+  puts "Select the question to add a choice to: "
+  print ">"
+  question_name = gets.chomp
+  question = Question.find_or_create_by(:name => question_name)
+  puts "Enter your choice"
+  print ">"
+  name = gets.chomp
+  new_choice = Choice.create({:name => name, :question_id => question.id})
+  puts "The choice '#{new_choice.name}' has been added to '#{question.name}'!\n"
+end
+
 
 main_menu
 
