@@ -12,10 +12,12 @@ def main_menu
   puts "Press 's' to add a new survey"
   puts "Press 'l' to list surveys"
   puts "Press 's' to exit"
+  puts "Press 'q' to add a question"
   user_choice = gets.chomp
   case user_choice
     when 's' then add_survey
     when 'l' then list_survey
+    when 'q' then add_question
     when 'x' then exit
   end
   main_menu
@@ -33,6 +35,13 @@ def list_survey
   Survey.all.each { |s| puts s.title}
   puts "\n"
 end
+
+def add_questions
+  puts "Enter the your question"
+  name = gets.chomp
+  new_question = Question.create({:name = name}}
+end
+
 
 main_menu
 
