@@ -20,5 +20,8 @@ def add_survey
   puts "Enter the title of your survey"
   title = gets.chomp
   new_title = Survey.create({:title => title})
+  puts "Survey #{new_title.title} added!"
 end
+
+main_menu
 
