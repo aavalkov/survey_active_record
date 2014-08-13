@@ -10,12 +10,30 @@ development_configuration = database_configurations['development']
 ActiveRecord::Base.establish_connection(development_configuration)
 
 def main_menu
+  puts "\n** Welcome to Surveys!! **"
+  puts "Press 'b' to build a survey."
+  puts "Press 't' to take a survey."
+  puts "Press 'x' to exit."
+  print ">"
+  user_choice = gets.chomp
+  case user_choice
+    when 'b' then survey_builder
+    when 't' then survey_taker
+    when 'x' then exit
+  end
+  main_menu
+end
+
+def survey_builder
   puts "Press 's' to add a new survey"
   puts "Press 'l' to list surveys"
   puts "Press 'u' to list all questions"
   puts "Press 'q' to add a question to a survey"
   puts "Press 'c' to add a choice to a question"
+  puts "Press 'v' to view all choices for a question"
+  puts "Press 'm' to return to the main menu"
   puts "Press 'x' to exit"
+  print ">"
   user_choice = gets.chomp
   case user_choice
     when 'c' then add_choice
@@ -23,9 +41,24 @@ def main_menu
     when 'l' then list_survey
     when 'u' then list_question
     when 'q' then add_question
+    when 'v' then view_choices
+    when 'm' then main_menu
     when 'x' then exit
   end
-  main_menu
+  survey_builder
+end
+
+def survey_taker
+  puts "Press 'l' to choose a survey to take"
+  puts "Press 'm' to return to the main menu"
+  puts "Press 'x' to exit"
+  print ">"
+  user_choice = gets.chomp
+  case user_choice
+    when 'm' then main_menu
+    when 'x' then exit
+  end
+  survey_taker
 end
 
 def add_survey
@@ -38,13 +71,13 @@ end
 
 def list_survey
   puts "All surveys:\n"
-  Survey.all.each { |s| puts s.title}
+  Survey.all.each { |s| puts "#{s.id}. #{s.title}"}
   puts "\n"
 end
 
 def list_question
   puts "All questions:\n"
-  Question.all.each { |q| puts q.name }
+  Question.all.each { |q| puts "#{q.id}. #{q.name}" }
   puts "\n"
 end
 
@@ -52,8 +85,8 @@ def add_question
   list_survey
   puts "Select the survey to add a question to: "
   print ">"
-  survey_title = gets.chomp
-  survey = Survey.find_or_create_by(:title => survey_title)
+  survey_id = gets.chomp.to_i
+  survey = Survey.find(survey_id)
   puts "Enter your question"
   print ">"
   name = gets.chomp
@@ -65,13 +98,18 @@ def add_choice
   list_question
   puts "Select the question to add a choice to: "
   print ">"
-  question_name = gets.chomp
-  question = Question.find_or_create_by(:name => question_name)
-  puts "Enter your choice"
+  question_id = gets.chomp.to_i
+  question = Question.find(question_id)
+  puts "Enter the new choice:"
   print ">"
   name = gets.chomp
   new_choice = Choice.create({:name => name, :question_id => question.id})
   puts "The choice '#{new_choice.name}' has been added to '#{question.name}'!\n"
+end
+
+def list_choices
+  list_question
+
 end
 
 
