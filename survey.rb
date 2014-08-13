@@ -55,19 +55,32 @@ def survey_taker
   print ">"
   user_choice = gets.chomp
   case user_choice
-    when 'l' then choose_survey
+    when 'l' then take_survey
     when 'm' then main_menu
     when 'x' then exit
   end
   survey_taker
 end
 
-def choose_survey
+def take_survey
   list_survey
   puts "Enter the number of the survey you'd like to take"
   number = gets.chomp.to_i
   survey = Survey.find(number)
   puts "The #{survey.title} is ready!"
+  questions = Question.where(:survey_id => survey.id)
+  questions.each do |question|
+    puts "#{question.name}"
+    choices = Choice.where(:question_id => question.id )
+      choices.each_with_index do |choice, index|
+      puts "#{index+1}. #{choice.name}"
+    end
+    puts "Enter the number of your choice"
+    choice = gets.chomp.to_i
+    result = Choice.all[choice-1]
+    new_response = Response.create({:choice_id => result.id})
+  end
+  puts "Survey completed! Thank you!"
 end
 
 def add_survey
