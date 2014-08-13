@@ -13,12 +13,14 @@ def main_menu
   puts "\n** Welcome to Surveys!! **"
   puts "Press 'b' to build a survey."
   puts "Press 't' to take a survey."
+  puts "Press 'd' to get survey data."
   puts "Press 'x' to exit."
   print ">"
   user_choice = gets.chomp
   case user_choice
     when 'b' then survey_builder
     when 't' then survey_taker
+    when 'd' then survey_data
     when 'x' then exit
   end
   main_menu
@@ -81,6 +83,23 @@ def take_survey
     new_response = Response.create({:choice_id => result.id})
   end
   puts "Survey completed! Thank you!"
+end
+
+def survey_data
+  list_survey
+  puts "Enter the number of the survey you'd like to get data on."
+  number = gets.chomp.to_i
+  survey = Survey.find(number)
+  questions = Question.where(:survey_id => survey.id)
+  questions.each do |question, index|
+    puts "#{index}. Question: #{question.name}"
+  end
+  puts "Enter the question you would like stats for:"
+  question_number = gets.chomp.to_i
+  choices = Choice.where(:question_id => question_number)
+  choices.each do |choice|
+    puts choice.number_of_responses
+  end
 end
 
 def add_survey
