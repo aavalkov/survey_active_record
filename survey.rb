@@ -68,9 +68,6 @@ def choose_survey
   number = gets.chomp.to_i
   survey = Survey.find(number)
   puts "The #{survey.title} is ready!"
-
-
-
 end
 
 def add_survey

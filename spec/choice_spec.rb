@@ -8,4 +8,10 @@ describe Choice do
     choice2 = Choice.create(:name => 'None of your business', :question_id => question.id)
     expect(choice.question).to eq question
   end
+
+  it 'has many responses' do
+    choice = Choice.create(:name => '20s')
+    response = Response.create(:choice_id => choice.id)
+    expect(choice.responses).to eq [response]
+  end
 end
