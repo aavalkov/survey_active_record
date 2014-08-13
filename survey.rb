@@ -55,10 +55,22 @@ def survey_taker
   print ">"
   user_choice = gets.chomp
   case user_choice
+    when 'l' then choose_survey
     when 'm' then main_menu
     when 'x' then exit
   end
   survey_taker
+end
+
+def choose_survey
+  list_survey
+  puts "Enter the number of the survey you'd like to take"
+  number = gets.chomp.to_i
+  survey = Survey.find(number)
+  puts "The #{survey.title} is ready!"
+
+
+
 end
 
 def add_survey
