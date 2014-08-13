@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Survey do
+  it 'should require a title upon initialization' do
+    Survey.new(:title => "assessment survey").should be_valid
+  end
+
   it "has many questions" do
     survey = Survey.create({:title => "assessment feedback"})
     question = Question.create({:name => "Choose your age range", :survey_id => survey.id })
