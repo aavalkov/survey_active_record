@@ -107,9 +107,12 @@ def add_choice
   puts "The choice '#{new_choice.name}' has been added to '#{question.name}'!\n"
 end
 
-def list_choices
+def view_choices
   list_question
-
+  puts "Enter the number of the question that you'd like to view choices for"
+  question_number = gets.chomp.to_i
+  choices = Choice.where(:question_id => question_number)
+  choices.each {|choice| puts choice.name}
 end
 
 
